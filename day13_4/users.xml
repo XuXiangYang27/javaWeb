@@ -2,6 +2,10 @@
 
 <users>
 	<user username="张三" password="111"/>
-	<user username="许湘扬" password="321"/>
+	<user username="许湘扬" password="123"/>
 	<user username="许湘扬1" password="123"/>
+	<user username="张三1" password="3213234"/>
+	<user username="李同会" password="3213"/>
+	<user username="1233" password="123"/>
+	<user username="许湘扬2" password="xngr"/>
 </users>

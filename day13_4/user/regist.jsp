@@ -4,14 +4,11 @@
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
-
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
     <base href="<%=basePath%>">
-    
-    <title>My JSP 'regist.jsp' starting page</title>
-    
+    <title>My JSP 'regist.jsp' starting page</title> 
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="expires" content="0">    
@@ -20,14 +17,24 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<!--
 	<link rel="stylesheet" type="text/css" href="styles.css">
 	-->
+<script type="text/javascript">
+	function change()
+	{
+		//1、获取img元素
+		var ele=document.getElementById("vCode");
+		ele.src="<c:url value='/VerifyCodeServlet'/>?xxx="+new Date().getTime();
+	}
+</script>
   </head>
-  
   <body>
     <h1>注册</h1>
     <p style="color: red;font-weight: 900">${msg }</p>
     <form action="<c:url value='RegistServlet'/>" method="post">
     用户名：<input type="text" name="username" value="${user.username }"/><br/>
     密  码：<input type="password" name="password" value="${user.password }"/><br/>
+    验证码：<input type="text" name="verifyCode" value="${user.verifyCode }" size="3">
+    			<img id="vCode" src="<c:url value='/VerifyCodeServlet'/>"/> 
+    			<a href="javascript:change()">换一张</a><br/>
     <input type="submit" value="注册"/>
     </form>
   </body>

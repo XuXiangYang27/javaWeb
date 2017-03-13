@@ -9,6 +9,11 @@
     <servlet-name>RegistServlet</servlet-name>
     <servlet-class>xxy.web.servlet.RegistServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>VerifyCodeServlet</servlet-name>
+    <servlet-class>xxy.web.servlet.VerifyCodeServlet</servlet-class>
+  </servlet>
+
 
 
   <servlet-mapping>
@@ -18,6 +23,10 @@
   <servlet-mapping>
     <servlet-name>RegistServlet</servlet-name>
     <url-pattern>/RegistServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>VerifyCodeServlet</servlet-name>
+    <url-pattern>/VerifyCodeServlet</url-pattern>
   </servlet-mapping>
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>
