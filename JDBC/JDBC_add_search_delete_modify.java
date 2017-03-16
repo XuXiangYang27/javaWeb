@@ -97,12 +97,21 @@ public class Demo2
 			stmt=con.createStatement();
 			rs=stmt.executeQuery("select * from emp");
 			//3、解析结果集
+			// while(rs.next())
+			// {
+			// 	int number=rs.getInt(1);
+			// 	String ename=rs.getString("ename");
+			// 	Double sal=rs.getDouble("sal");
+			// 	System.out.println(number+"\t"+ename+"\t"+sal);
+			// }
+			//通过结果集元数据 获得结果集列数
+			int count=rs.getMetaData().getColumnCount();//获得结果集列数
 			while(rs.next())
 			{
-				int number=rs.getInt(1);
-				String ename=rs.getString("ename");
-				Double sal=rs.getDouble("sal");
-				System.out.println(number+"\t"+ename+"\t"+sal);
+				for (int i = 1; i <=count; i++) 
+				{
+					System.out.print(rs.getObject(i)+"\t");
+				}System.out.println();
 			}
 		} 
 		catch (ClassNotFoundException e) 
