@@ -1,0 +1,9 @@
+JDBC_link.java                              JDBC连接数据库
+c3p0-config.xml                             c3p0配置文件
+JDBC_add_search_delete_modify.java          JDBC初级操作增删查改
+JDBC_batch.java                             批处理
+JDBC_BLOB.java                              大文件存储
+JDBC_Cpool.java                             初级连接池
+JDBC_dbUtils_ResultHandler.java             dbUtils使用demo
+JDBC_PreparedStatement.java                 PreparedStatement-demo
+JDBC_ThreadLocal.java                       ThreadLocal-demo
