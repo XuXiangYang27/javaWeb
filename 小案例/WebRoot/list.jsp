@@ -33,8 +33,10 @@
 <!-- 
 		items="${requestScope.cstmList}":要遍历的集合
 		var="cstm"  遍历出来的对象
+		
+		现在我们要遍历的是 pageBean中beanList这个集合
  -->
-<c:forEach items="${requestScope.cstmList}" var="cstm">
+<c:forEach items="${requestScope.pb.beanList}" var="cstm">
 	<tr>
 		<td>${cstm.cname }</td>
 		<td>${cstm.gender }</td>
@@ -49,5 +51,59 @@
 	</tr>
 </c:forEach>
 </table>
+
+<br/>
+<!-- 
+	给出分页相关的连接
+ -->
+<center>
+第${pb.pc}页/共${pb.tp}页
+
+<a href="${pb.url}&pc=1">首页</a>
+<c:if test="${pb.pc>1 }">
+<a href= "${pb.url}&pc=${pb.pc-1}" >上一页</a>
+</c:if>
+<!-- 计算begin 和 end -->
+<c:choose>
+	<%--当总页面<=10时,把所有的页标都显示出来 --%>
+	<c:when test="${pb.tp<=10}">
+		<c:set var="begin" value="1"/>
+		<c:set var="end" value="${pb.tp}"/>
+	</c:when>
+	<%--当总页面>10时，通过公式计算：begin=当前页-5，end=当前页+4 --%>
+	<c:otherwise>
+		<c:set var="begin" value="${pb.pc-5}"/>
+		<c:set var="end" value="${pb.pc+4}"/>
+		<%--头溢出 --%>
+		<c:if test="${begin<1}">
+			<c:set var="begin" value="1"/>
+			<c:set var="end" value="10"/>
+		</c:if>
+		<%--尾溢出 --%>
+		<c:if test="${end>pb.tp}">
+			<c:set var="begin" value="${end-9}"/>
+			<c:set var="end" value="${pb.tp}"/>
+		</c:if>
+	</c:otherwise>
+</c:choose>
+
+<!-- 循环遍历页码列表 -->
+<c:forEach var="i" begin="${begin}" end="${end}">
+	<c:choose>
+		<c:when test="${i eq pb.pc }">
+			[${i}] 
+		</c:when>
+		<c:otherwise>
+			<a href="${pb.url}&pc=${i}">${i}</a>
+		</c:otherwise>
+	</c:choose>	
+</c:forEach>
+
+<c:if test="${pb.pc<pb.tp }">
+<a href="${pb.url}&pc=${pb.pc+1}">下一页</a>
+</c:if>
+<a href="${pb.url}&pc=${pb.tp}">尾页</a>
+
+</center>
   </body>
 </html>

@@ -4,6 +4,7 @@ import java.util.List;
 
 import xxy.cstm.dao.CustomerDao;
 import xxy.cstm.domain.Customer;
+import xxy.cstm.domain.PageBean;
 
 public class CustomerService
 {
@@ -16,11 +17,11 @@ public class CustomerService
 		customerDao.add(c);
 	}
 	/*
-	 * 查询所有
+	 * 查询指定页面的所有用户
 	 */
-	public List<Customer> findAll()
+	public PageBean<Customer> findAll(int pc,int ps)
 	{
-		return customerDao.findAll();
+		return customerDao.findAll( pc, ps);
 	}
 	/*
 	 * 查询指定id用户
@@ -46,8 +47,8 @@ public class CustomerService
 	/*
 	 * 条件查询
 	 */
-	public List<Customer> query(Customer c)
+	public PageBean<Customer> query(Customer c,int pc,int ps)
 	{
-		return customerDao.query(c);
+		return customerDao.query(c,pc,ps);
 	}
 }

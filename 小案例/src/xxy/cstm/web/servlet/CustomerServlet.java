@@ -1,6 +1,7 @@
 package xxy.cstm.web.servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Commons;
 import xxy.cstm.domain.Customer;
+import xxy.cstm.domain.PageBean;
 import xxy.cstm.service.CustomerService;
 import cn.itcast.commons.CommonUtils;
 import cn.itcast.servlet.BaseServlet;
@@ -48,21 +50,56 @@ public class CustomerServlet extends BaseServlet
 	/*
 	 * 查询所有
 	 */
+//	public String findAll(HttpServletRequest request, HttpServletResponse response)
+//			throws ServletException, IOException {
+//		/*
+//		 * 1、调用service得到所有客户
+//		 * 2、保存到request域
+//		 * 3、转发到list.jsp
+//		 * 
+//		 */
+//		
+//		//1、调用service得到所有客户
+//		List<Customer> customers=customerService.findAll();
+//		//2、保存到request域
+//		request.setAttribute("cstmList", customers);
+//		//3、转发到list.jsp
+//		return "f:/list.jsp";
+//	}
 	public String findAll(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		/*
-		 * 1、调用service得到所有客户
-		 * 2、保存到request域
-		 * 3、转发到list.jsp
+		 * 1、获取页面传递的pc
+		 * 2、给定PS的值
+		 * 3、使用pc和ps调用service方法，得到pageBean，保存到request域中
+		 * 4、转发到list.jsp
 		 * 
 		 */
 		
-		//1、调用service得到所有客户
-		List<Customer> customers=customerService.findAll();
-		//2、保存到request域
-		request.setAttribute("cstmList", customers);
-		//3、转发到list.jsp
+		//1、得到pc,
+		//		如果参数存在，需要转换成int类型
+		//      如果不存在，说明pc=1
+		int pc =getPc(request);
+		//2、给定PS的值
+		int ps=10;//给定ps的值，每页10行记录
+		//3、使用pc和ps调用service方法，得到pageBean，保存到request域中
+		PageBean<Customer> pb=customerService.findAll(pc,ps);
+		
+		//设置URL
+		pb.setUrl(getUrl(request));
+		request.setAttribute("pb", pb);
 		return "f:/list.jsp";
+	}
+	/*
+	 * 获取pc（当前页码）
+	 */
+	private int getPc(HttpServletRequest req)
+	{
+		String pc=req.getParameter("pc");
+		if (pc==null || pc.trim().isEmpty()) {
+			return 1;
+		}
+		return Integer.parseInt(pc);
 	}
 	/*
 	 * 编辑信息_前奏
@@ -131,24 +168,99 @@ public class CustomerServlet extends BaseServlet
 	/*
 	 * 多条件组合查询
 	 */
+//	public String query(HttpServletRequest request, HttpServletResponse response)
+//			throws ServletException, IOException {
+//		/*
+//		 * 1、封装表单数据到Customer对象中，它只有四个属性
+//		 * 2、使用customer调用service方法，得到list<customer>
+//		 * 3、保存到request中
+//		 * 4、转发到list.jsp
+//		 * 
+//		 */
+//		
+//		//1、封装表单数据到Customer对象中，它只有四个属性
+//		Customer criteria=CommonUtils.toBean(request.getParameterMap(), Customer.class);
+//		
+//		//2、调用service删除方法
+//		List<Customer> cstmList=customerService.query(criteria);
+//		//3、保存到request中
+//		request.setAttribute("cstmList", cstmList);
+//		
+//		return "f:/list.jsp";
+//	}
+	/*
+	 * 截取Url
+	 *	/项目名/Servlet路径？参数字符串
+	 */
+	public String getUrl(HttpServletRequest request)
+	{
+		//项目名
+		String contextPath=request.getContextPath();
+		//servlet路径
+		String servletPath=request.getServletPath();
+		//参数字符串
+		String queryString=request.getQueryString();
+		
+		if (queryString.contains("&pc=")) {
+			int index=queryString.lastIndexOf("&pc=");
+			queryString=queryString.substring(0, index); 
+		}
+		return contextPath+servletPath+"?"+queryString;
+	}
+	/*
+	 * 处理编码问题：四个参数
+	 */
+	private Customer encoding(Customer c) throws UnsupportedEncodingException
+	{
+		String cname=c.getCname();
+		String gender=c.getGender();
+		String cellphone=c.getCellphone();
+		String email=c.getEmail();
+		//System.out.println("cname:"+cname);
+		if (cname!=null || !cname.trim().isEmpty()) {
+			cname=new String(cname.getBytes("ISO-8859-1"), "utf-8");
+			c.setCname(cname);
+		}
+		//System.out.println("cname2:"+c.getCname());
+		if (gender!=null || !gender.trim().isEmpty()) {
+			gender=new String(gender.getBytes("ISO-8859-1"), "utf-8");
+			c.setGender(gender);
+		}if (cellphone!=null || !cellphone.trim().isEmpty()) {
+			cellphone=new String(cellphone.getBytes("ISO-8859-1"), "utf-8");
+			c.setCellphone(cellphone);
+		}
+		if (email!=null || !email.trim().isEmpty()) {
+			email=new String(email.getBytes("ISO-8859-1"), "utf-8");
+			c.setEmail(email);
+		}
+		return c;
+	}
 	public String query(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+			throws ServletException, IOException
+	{
+		System.out.println(getUrl(request));
 		/*
-		 * 1、封装表单数据到Customer对象中，它只有四个属性
-		 * 2、使用customer调用service方法，得到list<customer>
-		 * 3、保存到request中
-		 * 4、转发到list.jsp
-		 * 
+		 * 0、把条件封装到Customer对象中
+		 * 1、得到pc
+		 * 2、给定ps
+		 * 3、使用pc和ps，以及条件对象，调用service方法得到pageBean
+		 * 4、把pageBean保存到request域中
+		 * 5、转发到list.jsp中
 		 */
-		
-		//1、封装表单数据到Customer对象中，它只有四个属性
+		//0、把条件封装到Customer对象中
 		Customer criteria=CommonUtils.toBean(request.getParameterMap(), Customer.class);
+		/*
+		 * 处理get请求方式中的编码问题
+		 */
+		criteria=encoding(criteria);
+	
+		int pc=getPc(request);//得到当前页码
+		int ps=10;//给定ps的值，每页10行
+		PageBean<Customer> pb=customerService.query(criteria, pc, ps);
 		
-		//2、调用service删除方法
-		List<Customer> cstmList=customerService.query(criteria);
-		//3、保存到request中
-		request.setAttribute("cstmList", cstmList);
-		
+		//得到url，保存到pb中，
+		pb.setUrl(getUrl(request));
+		request.setAttribute("pb", pb);
 		return "f:/list.jsp";
 	}
 }
