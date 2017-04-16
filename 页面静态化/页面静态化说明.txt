@@ -1,0 +1,5 @@
+htmls文件夹：存放生成的html文件
+
+
+StaticResponse.java :response的包装类，重写了getPrintWrite()方法
+						返回了一个与html文件绑定的PrintWrite对象
