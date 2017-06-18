@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.springframework.org/schema/beans" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd ">
+
+<!--===========set注入的两种方式：数值型注入和对象注入==============-->
+	<bean name="user" 
+	class="propertyInjection.bean.User"
+	>	
+		<!-- set方式注入属性 数值型-->
+		<property name="name" value="奇瑞QQ"/>
+		<property name="age" value="1000"/>
+		<!-- 为car属性注入下方配置的car对象 -->
+		<property name="car" ref="car"></property>
+	</bean>
+	
+	<!-- set方式注入 引用类型-->
+	<!-- 将car对象配置到容器中 -->
+	
+	<bean name="car" class="propertyInjection.bean.Car">
+	<property name="name" value="迈凯伦"></property>
+	<property name="color" value="red"></property>
+	</bean>
+
+<!-- ==================构 造 器 注入======================= -->      
+	<bean name="user2" class="propertyInjection.bean.User">
+		<constructor-arg name="name" value="xxy" type="java.lang.String" index="0"></constructor-arg>
+		<constructor-arg name="car" ref="car" index="1"></constructor-arg>
+	
+	</bean> 
+	
+	<bean name="user3" class="propertyInjection.bean.User">
+	
+		<constructor-arg 
+				name="name" value="18" type="java.lang.Integer" index="0">
+		</constructor-arg>
+		<constructor-arg name="car" ref="car" index="1"></constructor-arg>
+	
+	</bean>     
+</beans>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

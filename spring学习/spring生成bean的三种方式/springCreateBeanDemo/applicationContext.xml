@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.springframework.org/schema/beans" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd ">
+
+	<!-- 创建方式1、空参构造器 构造对象 （重要）
+	-->
+	<bean name="user1" class="springCreateBeanDemo.bean.User"></bean>
+	
+	<!-- 创建方式2、静态工厂创建 （了解即可） 
+		调用UserFactory的createUser方法创建名为user2的对象，放入容器
+	-->
+	
+	<bean name="user2" class="springCreateBeanDemo.bean.UserFactory"
+	      factory-method="createUser"></bean>
+	
+	<!-- 创建方式3、实例工厂创建 （了解即可） 
+		调用UserFactory的createUser2方法创建名为user3的对象，放入容器
+	-->
+	
+	<bean name="user3"
+		factory-bean="userFactory"
+	      factory-method="createUser2">
+	</bean>
+	
+	<bean name="userFactory"
+		 class="springCreateBeanDemo.bean.UserFactory">
+	</bean>
+
+	      
+	      
+	      
+</beans>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
